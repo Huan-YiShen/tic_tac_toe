@@ -84,15 +84,15 @@ def take_turn(btn_index, lab_message):
 
     
 def create_btn(root, index, lab_message):
-    size = font.Font(size=30)
-    return  Button(root, text = (index+1), padx = 40, pady = 40, borderwidth =3, font = size, command = lambda: take_turn(index, lab_message))
+    customFont = font.Font(size=20, weight='bold')
+    return  Button(root, text = (index+1), padx = 40, pady = 40, borderwidth =3, font = customFont, command = lambda: take_turn(index, lab_message))
     
 
 def gameGUI():
     root = Tk()
             
     # initate GUI objects
-    lab_message = Label(root, text = "x goes first")
+    lab_message = Label(root, text = "x goes first", font = font.Font(size=12))
 
     global BTN_gameBoard    
     BTN_gameBoard[0] = create_btn(root, 0, lab_message)
@@ -105,7 +105,7 @@ def gameGUI():
     BTN_gameBoard[7] = create_btn(root, 7, lab_message)
     BTN_gameBoard[8] = create_btn(root, 8, lab_message)
 
-    end_btn = Button(root, text = "new game", borderwidth =3, command = lambda: restart(lab_message))
+    end_btn = Button(root, text = "new game", padx = 150, borderwidth =5, fg = "green", command = lambda: restart(lab_message))
 
    
 
