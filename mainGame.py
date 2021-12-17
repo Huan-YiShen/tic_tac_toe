@@ -1,5 +1,5 @@
 from tkinter import *
-
+import tkinter.font as font
 '''
 Game board position is indexed as the follow
 1,2,3
@@ -14,21 +14,29 @@ WIN_CONDITION = [[1,2,3],
                  [1,4,7],
                  [2,5,8],
                  [3,6,9],
-                 [1,5,6],
+                 [1,5,9],
                  [3,5,7]
                 ]
 BTN_gameBoard = list(range(9))
 TURN = 0
 X_PLAY = True
-
-CURRENT_GAME = []
-WINNER = ''
 # #######################################################
 
 def deactivateALL():
     for btn in BTN_gameBoard:
         btn.config(state = "disabled")
-
+    
+    
+def restart(lab_message):
+    global TURN, X_PLAY
+    TURN = 0
+    X_PLAY = True
+    lab_message.config(text = "x goes first")
+    for index, btn in enumerate(BTN_gameBoard):
+        btn.config(text = index+1, state = "normal", background = 'SystemButtonFace')
+    
+    print("New Game _______________________________________________")
+    
 
 def take_turn(btn_index, lab_message):
     # displace output on screen 
@@ -38,16 +46,14 @@ def take_turn(btn_index, lab_message):
     if X_PLAY:
         currentlyPlaying = 'X'
         nextPlaying = 'O'
-        text_color = "blue"
         TURN = TURN +1
         X_PLAY = False
     else:
         currentlyPlaying = 'O'
         nextPlaying = 'X'
-        text_color = "red"
         X_PLAY = True
 
-    BTN_gameBoard[btn_index].config(text = currentlyPlaying, fg = text_color, state = "disabled")
+    BTN_gameBoard[btn_index].config(text = currentlyPlaying, state = "disabled")
     print(f"Current Turn: {TURN} | {currentlyPlaying} played in square {btn_index+1}")
 
 
@@ -68,15 +74,18 @@ def take_turn(btn_index, lab_message):
                 break
     
     if finish == True:
-        lab_message.config(text = f"{currentlyPlaying} won")
+        lab_message.config(text = f"{currentlyPlaying} WON")
         deactivateALL()
+    elif TURN == 5:
+        lab_message.config(text = f" DRAW ")
     else: 
         lab_message.config(text = f"{nextPlaying}'s turn")
 
 
     
 def create_btn(root, index, lab_message):
-    return  Button(root, text = (index+1), padx = 40, pady = 40, borderwidth =3, command = lambda: take_turn(index, lab_message))
+    size = font.Font(size=30)
+    return  Button(root, text = (index+1), padx = 40, pady = 40, borderwidth =3, font = size, command = lambda: take_turn(index, lab_message))
     
 
 def gameGUI():
@@ -96,7 +105,9 @@ def gameGUI():
     BTN_gameBoard[7] = create_btn(root, 7, lab_message)
     BTN_gameBoard[8] = create_btn(root, 8, lab_message)
 
-    
+    end_btn = Button(root, text = "new game", borderwidth =3, command = lambda: restart(lab_message))
+
+   
 
     # placement of GUI elements
     lab_message.grid(row = 0, column = 0, columnspan=3)
@@ -105,7 +116,7 @@ def gameGUI():
         for col_ind in range(3):
             BTN_gameBoard[btn_index].grid(row = row_ind, column = col_ind) 
             btn_index += 1        
-
+    end_btn.grid(row = 4, column = 0, columnspan = 3)
         
     root.mainloop()
 
